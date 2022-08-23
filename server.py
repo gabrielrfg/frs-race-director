@@ -1,3 +1,4 @@
+import os
 from aiohttp import web
 import socketio
 
@@ -7,7 +8,7 @@ sio.attach(app)
 
 @sio.on('message')
 def print_message(sid, message):
-    print(sid, message)
+    print(sid, message) 
 
 @sio.event
 async def connect(sid, environ, auth):
@@ -16,4 +17,4 @@ async def connect(sid, environ, auth):
 
 
 if __name__ == '__main__':
-    web.run_app(app)
+    web.run_app(app, port=os.environ.get('$PORT'))
