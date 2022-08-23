@@ -6,8 +6,8 @@ import socketio
 
 sio = socketio.AsyncServer()
 app = web.Application()
-app["secret"] = "secret"
-app["race_control_sid"] = 0
+# app["secret"] = "secret"
+# app["race_control_sid"] = 0
 sio.attach(app)
 
 
