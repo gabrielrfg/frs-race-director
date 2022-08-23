@@ -16,10 +16,8 @@ async def connect(sid, environ, auth):
     print('connect ', sid)
 
 @sio.event
-async def disconnect(sid, environ, auth):
+async def disconnect(sid):
     print('disconnect ', sid)
 
 
-
 web.run_app(app, port=os.environ.get('PORT'))
-print("he he")
