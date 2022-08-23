@@ -6,11 +6,11 @@ import socketio
 
 sio = socketio.AsyncServer()
 app = web.Application()
-# app["secret"] = "secret"
-# app["race_control_sid"] = 0
+app["secret"] = "secret"
+app["race_control_sid"] = 0
 sio.attach(app)
 
-
+app.add_routes([web.get('/', "hello")])
 
 @sio.on('enlist_race_control')
 def enlist_race_control(sid, message):
