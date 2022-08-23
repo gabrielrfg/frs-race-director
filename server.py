@@ -7,17 +7,18 @@ app = web.Application()
 sio.attach(app)
 
 #dict instance containing the car numbers as keys and the socket ids as values
-socket_dict = {}
+# socket_dict = {}
 
 
 @sio.on('register_number')
 def register_number(sid, number):
-    car_number = int(number)
-    if car_number in dict.keys():
-        sio.emit('register_number_response', "Failure")
-    else:
-        socket_dict[int(number)] = sid
-        sio.emit('register_number_response', "Success")
+    # car_number = int(number)
+    # if car_number in socket_dict.keys():
+    #     sio.emit('register_number_response', "Failure")
+    # else:
+    #     socket_dict[int(number)] = sid
+    #     sio.emit('register_number_response', "Success")
+    sio.emit('register_number_response', "Success")
 
 @sio.on('message')
 def print_message(sid, message):
