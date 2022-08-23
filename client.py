@@ -11,4 +11,4 @@ def connect():
 def got_message(message):
     print(message)
 
-sio.connect("https://rocky-reaches-49584.herokuapp.com:8080")
+sio.connect("https://rocky-reaches-49584.herokuapp.com")

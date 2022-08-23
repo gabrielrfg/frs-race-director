@@ -17,5 +17,5 @@ async def connect(sid, environ, auth):
 
 
 
-web.run_app(app, port=os.environ.get('$PORT'))
+web.run_app(app, port=os.environ.get('PORT'))
 print("he he")
