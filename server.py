@@ -16,5 +16,6 @@ async def connect(sid, environ, auth):
     print('connect ', sid)
 
 
-if __name__ == '__main__':
-    web.run_app(app, port=os.environ.get('$PORT'))
+
+web.run_app(app, port=os.environ.get('$PORT'))
+print("he he")
