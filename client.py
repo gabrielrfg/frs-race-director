@@ -21,18 +21,17 @@ def say_loop():
 t = Thread(target=say_loop)
 t.daemon = True
 t.start()
+
 sio = socketio.Client()
 car_number = 0
 
-
 @sio.event
 def connect():
-    sio.emit('register_number', car_number)
+    print("connected")
 
 @sio.on('message')
 def got_message(message):
     q.put(message)
-
 
 
 #car_number = input("Please insert your car number and press enter:\n")
