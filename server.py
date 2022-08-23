@@ -2,22 +2,21 @@ import os
 from aiohttp import web
 import socketio
 
-global secret
-global race_control_sid
-secret = "secret"
-race_control_sid = 0
 
 
 sio = socketio.AsyncServer()
 app = web.Application()
+app["secret"] = "secret"
+app["race_control_sid"] = 0
 sio.attach(app)
 
 
 
 @sio.on('enlist_race_control')
 def enlist_race_control(sid, message):
-    if race_control_sid == 0 and message == secret:
-        race_control_sid = sid
+    print(app["race_control_sid"])
+    if app["race_control_sid"] == 0 and message == app["secret"]:
+        app["race_control_sid"] = sid
         sio.emit('enlist_race_control_response', "success")
     else:
         sio.emit('enlist_race_control_response', "error")
