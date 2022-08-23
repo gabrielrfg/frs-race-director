@@ -22,7 +22,7 @@ t = Thread(target=say_loop)
 t.daemon = True
 t.start()
 sio = socketio.Client()
-number_registered = False
+car_number = 0
 
 
 @sio.event
@@ -31,17 +31,9 @@ def connect():
 
 @sio.on('message')
 def got_message(message):
-    if number_registered:
-        q.put(message)
+    q.put(message)
 
-@sio.on('register_number_response')
-def register_number_response(resp):
-    if(resp == "Success"):
-        q.put(f"Connected to race control as car number {car_number}")
-    else:   
-        q.put(f"Car number {car_number} already registered, shutting down")
-        time.sleep(3)
-        exit()
 
-car_number = input("Please insert your car number and press enter:\n")
+
+#car_number = input("Please insert your car number and press enter:\n")
 sio.connect("https://rocky-reaches-49584.herokuapp.com")

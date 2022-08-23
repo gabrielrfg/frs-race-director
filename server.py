@@ -2,35 +2,35 @@ import os
 from aiohttp import web
 import socketio
 
+secret = "secret"
 sio = socketio.AsyncServer()
 app = web.Application()
 sio.attach(app)
-
-#dict instance containing the car numbers as keys and the socket ids as values
-# socket_dict = {}
+race_control_sid = 0
 
 
-@sio.on('register_number')
-def register_number(sid, number):
-    # car_number = int(number)
-    # if car_number in socket_dict.keys():
-    #     sio.emit('register_number_response', "Failure")
-    # else:
-    #     socket_dict[int(number)] = sid
-    #     sio.emit('register_number_response', "Success")
-    sio.emit('register_number_response', "Success")
 
-@sio.on('message')
-def print_message(sid, message):
-    print(sid, message) 
+@sio.on('enlist_race_control')
+def enlist_race_control(sid, message):
+    if race_control_sid == 0 and message == secret:
+        race_control_sid = sid
+        sio.emit('enlist_race_control_response', "success")
+    else:
+        sio.emit('enlist_race_control_response', "error")
+
+
+
+@sio.on('message_race_control')
+def handle_race_control_message(sid, message):
+    sio.emit('message', message)
 
 @sio.event
 async def connect(sid, environ, auth):
-    #await sio.emit('message', "Drive through penalty for car number 69 420")
     print('connect ', sid)
 
 @sio.event
 async def disconnect(sid):
-    print('disconnect ', sid)
+    if sid == race_control_sid:
+        race_control_sid = 0
 
 web.run_app(app, port=os.environ.get('PORT'))
