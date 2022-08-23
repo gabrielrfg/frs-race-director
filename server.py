@@ -3,10 +3,10 @@ from aiohttp import web
 import socketio
 
 secret = "secret"
+race_control_sid = 0
 sio = socketio.AsyncServer()
 app = web.Application()
 sio.attach(app)
-race_control_sid = 0
 
 
 
