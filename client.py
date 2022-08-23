@@ -27,7 +27,7 @@ number_registered = False
 
 @sio.event
 def connect():
-    sio.emit('register_number', "hello")
+    sio.emit('register_number', car_number)
 
 @sio.on('message')
 def got_message(message):

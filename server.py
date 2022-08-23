@@ -13,7 +13,7 @@ socket_dict = {}
 @sio.on('register_number')
 def register_number(sid, number):
     car_number = int(number)
-    if car_number in dict:
+    if car_number in dict.keys():
         sio.emit('register_number_response', "Failure")
     else:
         socket_dict[int(number)] = sid
