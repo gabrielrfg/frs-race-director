@@ -12,8 +12,12 @@ def print_message(sid, message):
 
 @sio.event
 async def connect(sid, environ, auth):
-    await sio.emit('message', "HeLLo")
+    # await sio.emit('message', "HeLLo")
     print('connect ', sid)
+
+@sio.event
+async def disconnect(sid, environ, auth):
+    print('disconnect ', sid)
 
 
 
