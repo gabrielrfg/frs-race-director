@@ -12,6 +12,8 @@ sio.attach(app)
 
 @sio.on('enlist_race_control')
 def enlist_race_control(sid, message):
+    print(race_control_sid)
+    print(secret)
     if race_control_sid == 0 and message == secret:
         race_control_sid = sid
         sio.emit('enlist_race_control_response', "success")
