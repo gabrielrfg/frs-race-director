@@ -12,7 +12,7 @@ def print_message(sid, message):
 
 @sio.event
 async def connect(sid, environ, auth):
-    # await sio.emit('message', "HeLLo")
+    await sio.emit('message', "Drive through penalty for car number 69 420")
     print('connect ', sid)
 
 @sio.event
