@@ -1,1 +1,1 @@
-web: python server.py --bind localhost:8080
+web: python server.py
