@@ -28,7 +28,6 @@ async def enlist_race_control(sid, message):
 
 @sio.on('message_race_control')
 async def handle_race_control_message(sid, message):
-    print("rc")
     await sio.emit('message', message)
 
 @sio.event
