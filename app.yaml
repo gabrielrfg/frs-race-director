@@ -1,1 +1,2 @@
 entrypoint: python server.py
+runtime: python
