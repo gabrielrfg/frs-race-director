@@ -47,8 +47,10 @@ def cancel():
 
 root = Tk()
 root.title("FRS PENALTY BROADCAST TOOL")
-root.wm_attributes('-toolwindow', 'True')
+#root.protocol("WM_DELETE_WINDOW", exit)
+# root.wm_attributes('-toolwindow', 'True')
 root.resizable(False, False)
+root.iconbitmap()
 
 f4 = Frame(root, highlightbackground="gray", highlightthickness=5)
 f4.grid(row=0, column=0, rowspan=3,columnspan=3, sticky='w')
@@ -104,6 +106,10 @@ def send_message(message):
 @sio.event
 def connect():
     sio.emit('enlist_race_control', secret)
+
+@sio.event
+def disconnect():
+    exit()
 
 @sio.on('enlist_race_control_response')
 def enlist_race_control_response(message):
