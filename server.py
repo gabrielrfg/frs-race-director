@@ -10,9 +10,9 @@ app["secret"] = "secret"
 app["race_control_sid"] = 0
 sio.attach(app)
 
-def hello():
+def hello(a):
     return "hello"
-    
+
 app.add_routes([web.get('/', hello)])
 
 @sio.on('enlist_race_control')
@@ -37,7 +37,7 @@ async def connect(sid, environ, auth):
 
 @sio.event
 async def disconnect(sid):
-    if sid == race_control_sid:
-        race_control_sid = 0
+    if sid == app["race_control_sid"]:
+        app["race_control_sid"] = 0
 
 web.run_app(app, port=os.environ.get('PORT'))

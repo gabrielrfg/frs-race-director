@@ -20,12 +20,14 @@ def connect():
 @sio.on('enlist_race_control_response')
 def enlist_race_control_response(message):
     if message == "success":
+        print("enlisted")
         enlisted = True
         send_message("Stop and go penalty")
     else:
+        print("failed")
         exit()
 
 
-sio.connect("https://rocky-reaches-49584.herokuapp.com")
+sio.connect("https://dulcet-answer-360423.nw.r.appspot.com")
 
 
