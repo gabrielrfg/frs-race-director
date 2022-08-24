@@ -29,5 +29,6 @@ def enlist_race_control_response(message):
 
 
 sio.connect("https://dulcet-answer-360423.nw.r.appspot.com")
+# sio.connect("http://localhost:8080")
 
 
