@@ -6,23 +6,17 @@ import socketio
 
 sio = socketio.AsyncServer()
 app = web.Application()
-app["secret"] = "secret"
-app["race_control_sid"] = 0
+state = {"secret" : "secret", "race_control_sid":0}
+app["state"] = state
 sio.attach(app)
-
-def hello(a):
-    return "hello"
-
-app.add_routes([web.get('/', hello)])
 
 @sio.on('enlist_race_control')
 async def enlist_race_control(sid, message):
-    print(app["race_control_sid"])
-    if app["race_control_sid"] == 0 and message == app["secret"]:
-        app["race_control_sid"] = sid
-        await sio.emit('enlist_race_control_response', "success")
+    if app["state"]["race_control_sid"] == 0 and message == app["state"]["secret"]:
+        app["state"]["race_control_sid"] = sid
+        await sio.emit('enlist_race_control_response', "success", sid)
     else:
-        await sio.emit('enlist_race_control_response', "error")
+        await sio.emit('enlist_race_control_response', "error", sid)
 
 
 
@@ -36,7 +30,8 @@ async def connect(sid, environ, auth):
 
 @sio.event
 async def disconnect(sid):
-    if sid == app["race_control_sid"]:
-        app["race_control_sid"] = 0
+    print('disconnect ', sid)
+    if sid == app["state"]["race_control_sid"]:
+        app["state"]["race_control_sid"] = 0
 
 web.run_app(app, port=os.environ.get('PORT'))

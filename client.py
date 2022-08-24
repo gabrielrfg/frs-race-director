@@ -35,5 +35,5 @@ def got_message(message):
 
 
 #car_number = input("Please insert your car number and press enter:\n")
-sio.connect("https://dulcet-answer-360423.nw.r.appspot.com")
-# sio.connect("http://localhost:8080")
+# sio.connect("https://dulcet-answer-360423.nw.r.appspot.com")
+sio.connect("http://localhost:8080")

@@ -1,4 +1,5 @@
 import queue
+import sys
 import tkinter
 import socketio
 import pyttsx3
@@ -6,6 +7,8 @@ from queue import Queue
 from threading import Thread
 import time
 from tkinter import *
+import sys
+import os
 
 
 def form(penalty):
@@ -47,10 +50,8 @@ def cancel():
 
 root = Tk()
 root.title("FRS PENALTY BROADCAST TOOL")
-#root.protocol("WM_DELETE_WINDOW", exit)
 # root.wm_attributes('-toolwindow', 'True')
 root.resizable(False, False)
-root.iconbitmap()
 
 f4 = Frame(root, highlightbackground="gray", highlightthickness=5)
 f4.grid(row=0, column=0, rowspan=3,columnspan=3, sticky='w')
@@ -109,7 +110,9 @@ def connect():
 
 @sio.event
 def disconnect():
-    exit()
+    print("disconnect")
+    os.kill(os.getpid(), 9)
+
 
 @sio.on('enlist_race_control_response')
 def enlist_race_control_response(message):
@@ -118,10 +121,11 @@ def enlist_race_control_response(message):
         enlisted = True
     else:
         print("failed")
-        exit()
+        root.destroy()
+        sio.disconnect()
 
 
-sio.connect("https://dulcet-answer-360423.nw.r.appspot.com")
-# sio.connect("http://localhost:8080")
+# sio.connect("https://dulcet-answer-360423.nw.r.appspot.com")
+sio.connect("http://localhost:8080")
 root.mainloop()
-
+sio.disconnect()
