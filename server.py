@@ -1,22 +1,30 @@
 import os
 from aiohttp import web
 import socketio
-
+import jwt
 
 
 sio = socketio.AsyncServer()
 app = web.Application()
-state = {"secret" : "secret", "race_control_sid":0}
+state = {"key": "key", "secret" : "secret", "race_control_sid":0}
 app["state"] = state
 sio.attach(app)
 
 @sio.on('enlist_race_control')
 async def enlist_race_control(sid, message):
-    if app["state"]["race_control_sid"] == 0 and message == app["state"]["secret"]:
-        app["state"]["race_control_sid"] = sid
-        await sio.emit('enlist_race_control_response', "success", sid)
-    else:
-        await sio.emit('enlist_race_control_response', "error", sid)
+    result = ""
+    try:
+        decoded = jwt.decode(message, app["state"]["key"], algorithms=["HS256"])["secret"]
+        if decoded != app["state"]["secret"]:
+            result = "Wrong Password"
+        elif app["state"]["race_control_sid"] != 0:
+            result = "Race Director already connected"
+        else:
+            result = "success"
+    except jwt.exceptions.InvalidSignatureError:
+        result = "Wrong Password"
+
+    await sio.emit('enlist_race_control_response', result, sid)
 
 
 

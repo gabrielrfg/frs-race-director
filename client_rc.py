@@ -1,6 +1,7 @@
 import queue
 import sys
 import tkinter
+from turtle import color
 import socketio
 import pyttsx3
 from queue import Queue
@@ -9,7 +10,11 @@ import time
 from tkinter import *
 import sys
 import os
+import jwt
 
+
+def login():
+    sio.emit('enlist_race_control', jwt.encode({"secret": "secret"}, password.get()))
 
 def form(penalty):
     if not in_form.get():
@@ -64,14 +69,24 @@ f2.grid(row=0, column=0, rowspan=3,columnspan=3, sticky='w')
 
 f1 = Frame(root)
 f1.grid(row=0, column=0, rowspan=3,columnspan=2, sticky='w')
+
+f5 = Frame(root, highlightbackground="gray", highlightthickness=5)
+f5.grid(row=0, column=0, rowspan=3,columnspan=3, sticky='w')
+
 f2.place(in_=f1, anchor="c", relx=.5, rely=.5)
 f3.place(in_=f1, anchor="c", relx=.5, rely=.5)
 f4.place(in_=f1, anchor="c", relx=.5, rely=.5)
+f5.place(in_=f1, anchor="c", relx=.5, rely=.5)
+
 
 reason = StringVar()
 car_number = StringVar()
 penalty_type = StringVar()
 in_form = BooleanVar()
+in_form.set(True)
+password = StringVar()
+login_result = StringVar()
+login_result.set("Insert Password")
 
 
 Button(f1,height = 9, width = 21,bg="lightsalmon", text = "Time Penalty", command=lambda:form("Time Penalty")).grid(row = 0, column = 0, sticky='we')
@@ -79,7 +94,9 @@ Button(f1,height = 9, width = 21,bg="lightcoral", text = "Stop and Go Penalty", 
 Button(f1,height = 9, width = 21,bg="lightyellow", text = "Warning", command=lambda:form("Warning")).grid(row = 1, column = 0, sticky='we')
 Button(f1,height = 9, width = 21,bg="orange", text = "Full Course Yellow", command=lambda:sc_form("Full Course Yellow")).grid(row = 1, column = 1, sticky='we')
 Button(f1,height = 9, width = 21,bg="gold", text = "Safety Car", command=lambda:sc_form("Safety Car")).grid(row = 0, column = 2, sticky='we')
-Button(f1,height = 9, width = 21,bg="gainsboro", text = "Broadcast Message", command=message_form).grid(row = 1, column = 2, sticky='we')
+Button(f1,height = 9, width = 21,bg="darkred",fg="white", text = "Red Flag", command=lambda:sc_form("Red Flag")).grid(row = 0, column = 3, sticky='we')
+Button(f1,height = 9, width = 21,bg="black",fg="white", text = "Checkered Flag", command=lambda:sc_form("Checkered Flag")).grid(row = 1, column = 2, sticky='we')
+Button(f1,height = 9, width = 21,bg="gainsboro", text = "Broadcast Message", command=message_form).grid(row = 1, column = 3, sticky='we')
 Label(f2, text = "Reason").grid(row = 0, column = 0, sticky='we')
 Entry(f2, textvariable=reason).grid(row = 0, column = 1, sticky='we')
 Label(f2,text = "Car Number").grid(row = 1, column = 0, sticky='we')
@@ -97,6 +114,10 @@ Entry(f4, textvariable=reason).grid(row = 0, column = 1, sticky='we')
 Button(f4,bg="green", text = "Send", command=send_sc_message).grid(row = 1, column = 0, sticky='we')
 Button(f4,bg="red", text = "Cancel", command=cancel).grid(row = 1, column = 1, sticky='we')
 
+Entry(f5, textvariable=password).grid(row = 1, column = 0, sticky='we')
+Button(f5,bg="lightblue", text = "Login", command=login).grid(row = 1, column = 1, sticky='we')
+Label(f5, textvariable = login_result).grid(row = 0, column = 0, sticky='we')
+
 sio = socketio.Client()
 secret = "secret"
 enlisted = False
@@ -106,7 +127,7 @@ def send_message(message):
 
 @sio.event
 def connect():
-    sio.emit('enlist_race_control', secret)
+    print("connected")
 
 @sio.event
 def disconnect():
@@ -119,13 +140,14 @@ def enlist_race_control_response(message):
     if message == "success":
         print("enlisted")
         enlisted = True
+        f5.destroy()
+        in_form.set(False)
     else:
         print("failed")
-        root.destroy()
-        sio.disconnect()
+        login_result.set(message)
 
 
-# sio.connect("https://dulcet-answer-360423.nw.r.appspot.com")
-sio.connect("http://localhost:8080")
+sio.connect("https://dulcet-answer-360423.nw.r.appspot.com")
+# sio.connect("http://localhost:8080")
 root.mainloop()
 sio.disconnect()
