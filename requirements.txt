@@ -1,5 +1,3 @@
 aiohttp
 python-socketio
 pyttsx3
-pyjwt
-rsa

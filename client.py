@@ -4,6 +4,11 @@ import pyttsx3
 from queue import Queue
 from threading import Thread
 import time
+import ctypes
+
+#Turns off quick edit mode in windows
+kernel32 = ctypes.windll.kernel32
+kernel32.SetConsoleMode(kernel32.GetStdHandle(-10), 128)
 
 q = Queue()
 
